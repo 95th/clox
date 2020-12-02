@@ -1,12 +1,11 @@
 BUILD_DIR := build
-INCLUDE_DIR := include
 SOURCE_DIR := src
 
 NAME := clox
 MODE := debug
 
 CC := clang
-CFLAGS := -std=c99 -Wall -Wextra -Werror -Wno-unused-parameter -I$(INCLUDE_DIR)
+CFLAGS := -std=c99 -Wall -Wextra -Werror -Wno-unused-parameter
 
 ifeq ($(MODE),debug)
 	CFLAGS += -O0 -DDEBUG -g
@@ -17,7 +16,7 @@ else
 endif
 
 # Files.
-HEADERS := $(wildcard $(INCLUDE_DIR)/*.h)
+HEADERS := $(wildcard $(SOURCE_DIR)/*.h)
 SOURCES := $(wildcard $(SOURCE_DIR)/*.c)
 OBJECTS := $(addprefix $(BUILD_DIR)/$(NAME)/, $(notdir $(SOURCES:.c=.o)))
 
