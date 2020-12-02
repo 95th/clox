@@ -1,6 +1,6 @@
 #include "value.h"
-
 #include "memory.h"
+#include <stdio.h>
 
 void init_value_array(ValueArray* array) {
     array->values = NULL;
@@ -24,3 +24,5 @@ void write_value_array(ValueArray* array, Value value) {
     array->values[array->count] = value;
     array->count++;
 }
+
+void print_value(Value value) { printf("%g", value); }
