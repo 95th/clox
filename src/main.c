@@ -12,6 +12,10 @@ int main(int argc, const char** argv) {
     write_chunk(&chunk, OP_CONSTANT, 123);
     write_chunk(&chunk, constant, 123);
     write_chunk(&chunk, OP_NEGATE, 123);
+    int constant2 = add_constant(&chunk, 2.3);
+    write_chunk(&chunk, OP_CONSTANT, 123);
+    write_chunk(&chunk, constant2, 123);
+    write_chunk(&chunk, OP_ADD, 123);
     write_chunk(&chunk, OP_RETURN, 123);
 
     interpret(&chunk);
