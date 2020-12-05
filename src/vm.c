@@ -27,6 +27,10 @@ static void runtime_error(const char* format, ...) {
 void initVM() { reset_stack(); }
 void freeVM() {}
 
+static bool is_falsey(Value value) {
+    return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
+}
+
 static InterpretResult run() {
 #define READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
@@ -70,14 +74,16 @@ static InterpretResult run() {
         case OP_FALSE:
             push(BOOL_VAL(false));
             break;
-        case OP_NEGATE: {
+        case OP_NOT:
+            push(BOOL_VAL(is_falsey(pop())));
+            break;
+        case OP_NEGATE:
             if (!IS_NUMBER(peek(0))) {
                 runtime_error("Operand must be a number");
                 return INTERPRET_RUNTIME_ERROR;
             }
             push(NUMBER_VAL(-AS_NUMBER(pop())));
             break;
-        }
         case OP_ADD:
             BINARY_OP(NUMBER_VAL, +);
             break;

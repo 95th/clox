@@ -36,6 +36,8 @@ int disassemble_instr(Chunk* chunk, int offset) {
     switch (instr) {
     case OP_CONSTANT:
         return constant_instr("OP_CONSTANT", chunk, offset);
+    case OP_NOT:
+        return simple_instr("OP_NOT", offset);
     case OP_NEGATE:
         return simple_instr("OP_NEGATE", offset);
     case OP_ADD:
