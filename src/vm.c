@@ -31,6 +31,23 @@ static bool is_falsey(Value value) {
     return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
 }
 
+static bool values_equal(Value a, Value b) {
+    if (a.type != b.type) {
+        return false;
+    }
+
+    switch (a.type) {
+    case VAL_BOOL:
+        return AS_BOOL(a) == AS_BOOL(b);
+    case VAL_NIL:
+        return true;
+    case VAL_NUMBER:
+        return AS_NUMBER(a) == AS_NUMBER(b);
+    default:
+        return false;
+    }
+}
+
 static InterpretResult run() {
 #define READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
@@ -40,8 +57,8 @@ static InterpretResult run() {
             runtime_error("Operands must be numbers");                         \
             return INTERPRET_RUNTIME_ERROR;                                    \
         }                                                                      \
-        double a = AS_NUMBER(pop());                                           \
         double b = AS_NUMBER(pop());                                           \
+        double a = AS_NUMBER(pop());                                           \
         push(value_type(a op b));                                              \
     } while (false)
 
@@ -83,6 +100,18 @@ static InterpretResult run() {
                 return INTERPRET_RUNTIME_ERROR;
             }
             push(NUMBER_VAL(-AS_NUMBER(pop())));
+            break;
+        case OP_EQUAL: {
+            Value b = pop();
+            Value a = pop();
+            push(BOOL_VAL(values_equal(a, b)));
+            break;
+        }
+        case OP_GREATER:
+            BINARY_OP(BOOL_VAL, >);
+            break;
+        case OP_LESS:
+            BINARY_OP(BOOL_VAL, <);
             break;
         case OP_ADD:
             BINARY_OP(NUMBER_VAL, +);

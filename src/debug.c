@@ -56,6 +56,12 @@ int disassemble_instr(Chunk* chunk, int offset) {
         return simple_instr("OP_FALSE", offset);
     case OP_NIL:
         return simple_instr("OP_NIL", offset);
+    case OP_EQUAL:
+        return simple_instr("OP_EQUAL", offset);
+    case OP_GREATER:
+        return simple_instr("OP_GREATER", offset);
+    case OP_LESS:
+        return simple_instr("OP_LESS", offset);
     default:
         printf("Unknown opcode %d\n", instr);
         return offset + 1;
