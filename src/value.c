@@ -25,4 +25,4 @@ void write_value_array(ValueArray* array, Value value) {
     array->count++;
 }
 
-void print_value(Value value) { printf("%g", value); }
+void print_value(Value value) { printf("%g", AS_NUMBER(value)); }
