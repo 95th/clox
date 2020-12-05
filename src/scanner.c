@@ -35,6 +35,8 @@ static Token error_token(const char* message) {
     return token;
 }
 
+static bool is_at_end() { return *scanner.current == '\0'; }
+
 static bool match(char expected) {
     if (is_at_end()) {
         return false;
@@ -52,8 +54,6 @@ static char advance() {
     scanner.current++;
     return scanner.current[-1];
 }
-
-static bool is_at_end() { return *scanner.current == '\0'; }
 
 static char peek() { return *scanner.current; }
 
@@ -129,8 +129,8 @@ static Token number() {
     return make_token(TOKEN_NUMBER);
 }
 
-static TokenType checkKeyword(int start, int length, const char* rest,
-                              TokenType type) {
+static TokenType check_keyword(int start, int length, const char* rest,
+                               TokenType type) {
     if (scanner.current - scanner.start == start + length &&
         memcmp(scanner.start + start, rest, length) == 0) {
         return type;
@@ -185,9 +185,8 @@ static TokenType identifier_type() {
         return check_keyword(1, 2, "ar", TOKEN_NIL);
     case 'w':
         return check_keyword(1, 4, "hile", TOKEN_WHILE);
-
-        return TOKEN_IDENTIFIER;
     }
+    return TOKEN_IDENTIFIER;
 }
 
 static Token identifier() {
