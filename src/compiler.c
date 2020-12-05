@@ -3,20 +3,10 @@
 #include "scanner.h"
 #include <stdio.h>
 
-void compiler(const char* source) {
+bool compile(const char* source, Chunk* chunk) {
     init_scanner(source);
-    int line = -1;
-    for (;;) {
-        Token token = scan_token();
-        if (token.line != line) {
-            printf("%4d ", token.line);
-            line = token.line;
-        } else {
-            printf("   | ");
-        }
-        printf("%2d '%.*s'\n", token.type, token.length, token.start);
-        if (token.type == TOKEN_EOF) {
-            break;
-        }
-    }
+
+    advance();
+    expression();
+    consume(TOKEN_EOF, "Expected end of expression");
 }
